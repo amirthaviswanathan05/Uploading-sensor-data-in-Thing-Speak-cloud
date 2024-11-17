@@ -71,10 +71,54 @@ Automatically act on your data and communicate using third-party services like T
 
 
 # PROGRAM:
-
+```
+#include <WiFi.h>
+#include <WiFiClient.h>;
+#include <ThingSpeak.h>;
+const char* ssid = "OPPO A77s"; //Your Network SSID
+const char* password = "yuva2004"; //Your Network Password
+int val;
+#include <DHT.h>
+#define DHT11PIN 23
+#define DHTTYPE DHT11
+DHT dht(DHT11PIN, DHTTYPE);
+float h,tc ;
+WiFiClient client;
+unsigned long myChannelNumber = 2744293; //Your Channel Number (Without Brackets)
+//unsigned long myChannelField = 1870717; // Channel ID
+//const int ChannelField = 1; // Which channel to write data
+const char * myWriteAPIKey = "FH5LBAWMTG9NBUS0"; // Your write API Key
+void setup()
+{
+   Serial.begin(115200);
+   delay(10); // Connect to WiFi network
+   WiFi.begin(ssid, password);
+   ThingSpeak.begin(client);
+   dht.begin();
+   delay(1000);
+   Serial.println("DHT11 Temperature and Humidity ");
+}
+void loop()
+{
+  h = dht.readHumidity();
+  tc = dht.readTemperature();
+  Serial.print('\n');
+  Serial.print("Humidity = ");
+  Serial.print(h);
+  Serial.print("%,  ");
+  Serial.print("Temperature = ");
+  Serial.print(tc);
+  Serial.print("°C, "); 
+ThingSpeak.writeField(myChannelNumber, 1,h, myWriteAPIKey); //Update in ThingSpeak
+ThingSpeak.writeField(myChannelNumber, 2,tc, myWriteAPIKey); //Update in ThingSpeak
+delay(100);
+}
+```
 # CIRCUIT DIAGRAM:
+![386636488-4a3427ce-6af9-4cc5-b455-46862a7bcf86](https://github.com/user-attachments/assets/5592bb64-9be4-4494-a125-9869bff89a9a)
 
 # OUTPUT:
+![prototype img](https://github.com/user-attachments/assets/1d462ff3-0c50-4361-a576-747300a644c6)
 
 # RESULT:
 
